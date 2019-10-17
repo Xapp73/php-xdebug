@@ -3,7 +3,7 @@ COPY config/php.ini /usr/local/etc/php/
 
 RUN mkdir /tmp/xdebug
 WORKDIR /tmp/xdebug
-RUN apt-get update && apt-get install -y wget && wget https://xdebug.org/files/xdebug-2.7.2.tgz && tar -xvzf xdebug-2.7.2.tgz
+RUN apt-get update && apt-get install -y wget && wget https://xdebug.org/files/xdebug-2.7.2.tgz && tar -xvzf xdebug-2.7.2.tgz && apt-get install -y gnupg
 WORKDIR /tmp/xdebug/xdebug-2.7.2
 RUN echo "Dpkg::Options {\
    "--force-confdef";\
@@ -54,6 +54,9 @@ RUN apt-get install -y git && apt-get install -y curl && curl --silent --locatio
 RUN apt-get install -y libzip-dev && pecl install zip && docker-php-ext-enable zip
 
 #mysql
+RUN apt-key adv --keyserver hkps://keyserver.ubuntu.com:443 --recv-keys 5072E1F5
+RUN echo deb http://repo.mysql.com/apt/debian/ buster mysql-5.7 > /etc/apt/sources.list.d/mysql.list
+RUN apt-get update && apt-get install -y mysql-client
 RUN docker-php-ext-install mysqli && docker-php-ext-install pdo_mysql && docker-php-ext-install gettext
 
 #apcu
